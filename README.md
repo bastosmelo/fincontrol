@@ -5,7 +5,7 @@ ________________________________________________________________________________
 | Nome do Aluno                    | Telas e Funcionalidades                        |
 |----------------------------------|------------------------------------------------|
 | Bruno Bastos Melo                | Tela de Login, Autenticação de Usuário         |
-| Brendo de Jesus Silva            | Recuperpar senha, Tela de confirmação          |
+| Brendo de Jesus Silva            | Recuperar senha, Tela de confirmação          |
 | Gabriel Allan Ribeiro da Silva   | Dashboard, Inclusão de despesas.                                               |
 | Jean Marcos Lima Santos          | Tela de cadastro, Tela de configuração         |
 |Arthur Vinícius Sousa de Melo     |                                                |
