@@ -96,12 +96,12 @@ class SenhaEnviadaPage extends StatelessWidget {
                     const SizedBox(height: 42),
                     Builder(
                       builder: (context) {
-                        final buttonSize = width * 0.30;
-                        final iconSize = buttonSize * 0.30;
+                        final buttonSize = width * 0.15;
+                        final iconSize = buttonSize * 0.35;
 
                         return Container(
-                          width: buttonSize.clamp(100.0, 220.0),
-                          height: buttonSize.clamp(100.0, 220.0),
+                          width: buttonSize.clamp(80.0, 130.0),
+                          height: buttonSize.clamp(80.0, 130.0),
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color(0xFF68D391),
@@ -110,7 +110,7 @@ class SenhaEnviadaPage extends StatelessWidget {
                             child: Icon(
                               Icons.arrow_back,
                               color: Colors.white,
-                              size: iconSize.clamp(32.0, 72.0),
+                              size: iconSize.clamp(24.0, 40.0),
                             ),
                           ),
                         );
