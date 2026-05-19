@@ -58,12 +58,6 @@ class RecuperarSenhaPage extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color(0xFF68D391),
-            onPressed: () => Navigator.of(context).maybePop(),
-            child: const Icon(Icons.arrow_back, color: Colors.white),
-          ),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -133,7 +127,28 @@ class RecuperarSenhaPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 120),
+                      const SizedBox(height: 32),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).maybePop(),
+                          child: Container(
+                            width: (width * 0.20).clamp(100.0, 150.0),
+                            height: (width * 0.20).clamp(100.0, 150.0),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFF68D391),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                                size: (width * 0.20 * 0.35).clamp(30.0, 46.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 60),
                     ],
                   ),
                 ),
