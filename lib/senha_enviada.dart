@@ -69,54 +69,58 @@ class SenhaEnviadaPage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 24),
-                    Text(
-                      'Senha enviada com sucesso',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: isLarge ? 32 : 28,
-                        fontWeight: FontWeight.w600,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Senha enviada com sucesso',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: isLarge ? 32 : 28,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      'Confira seu e-mail para recuperar o acesso à sua conta.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF6B6B6B),
-                        fontSize: 16,
-                        height: 1.6,
+                      const SizedBox(height: 18),
+                      const Text(
+                        'Confira seu e-mail para recuperar o acesso à sua conta.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF6B6B6B),
+                          fontSize: 16,
+                          height: 1.6,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 42),
-                    Builder(
-                      builder: (context) {
-                        final buttonSize = width * 0.15;
-                        final iconSize = buttonSize * 0.35;
+                      const SizedBox(height: 42),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Builder(
+                          builder: (context) {
+                            final buttonSize = width * 0.15;
+                            final iconSize = buttonSize * 0.35;
 
-                        return Container(
-                          width: buttonSize.clamp(80.0, 130.0),
-                          height: buttonSize.clamp(80.0, 130.0),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFF68D391),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                              size: iconSize.clamp(24.0, 40.0),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                            return Container(
+                              width: buttonSize.clamp(80.0, 130.0),
+                              height: buttonSize.clamp(80.0, 130.0),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFF68D391),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: iconSize.clamp(24.0, 40.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
