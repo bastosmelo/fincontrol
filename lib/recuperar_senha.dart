@@ -132,8 +132,8 @@ class RecuperarSenhaPage extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () => Navigator.of(context).maybePop(),
                           child: Container(
-                            width: (width * 0.20).clamp(100.0, 150.0),
-                            height: (width * 0.20).clamp(100.0, 150.0),
+                            width: (width * 0.14).clamp(80.0, 120.0),
+                            height: (width * 0.14).clamp(80.0, 120.0),
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Color(0xFF68D391),
@@ -142,7 +142,7 @@ class RecuperarSenhaPage extends StatelessWidget {
                               child: Icon(
                                 Icons.arrow_back,
                                 color: Colors.white,
-                                size: (width * 0.20 * 0.35).clamp(30.0, 46.0),
+                                size: (width * 0.14 * 0.35).clamp(24.0, 36.0),
                               ),
                             ),
                           ),
