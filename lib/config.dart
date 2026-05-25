@@ -166,4 +166,3 @@ class ConfigPage extends StatelessWidget {
     );
   }
 }
-
