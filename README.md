@@ -10,5 +10,5 @@ ________________________________________________________________________________
 | Brendo de Jesus Silva            | Recuperar senha, Tela de confirmação           |
 | Gabriel Allan Ribeiro da Silva   | Dashboard, Inclusão de despesas.               |
 | Jean Marcos Lima Santos          | Tela de cadastro, Tela de configuração         |
-|Arthur Vinícius Sousa de Melo     |                                                |
+|Arthur Vinícius Sousa de Melo     | Tela de cadastro                               |
 -------------------------------------------------------------------------------------
