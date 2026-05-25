@@ -33,8 +33,7 @@ class LoginAppPage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     void openDashboard() {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
-      );
+        MaterialPageRoute(builder: (_) => const DashboardScreen       ()),      );
     }
 
     return Scaffold(

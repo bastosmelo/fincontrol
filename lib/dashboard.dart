@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'config.dart';
+// 1. Importe o arquivo da nova página aqui
+import 'adddespesas.dart'; 
 
 void main() {
   runApp(
@@ -62,11 +62,7 @@ class DashboardPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
-              },
+              onPressed: () {},
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
@@ -95,7 +91,8 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(height: 28),
                   _buildProfileSection(),
                   const SizedBox(height: 28),
-                  _buildAddButton(),
+                  // Passamos o contexto para a função do botão conseguir navegar
+                  _buildAddButton(context), 
                   const SizedBox(height: 32),
                   _buildCategoriesSection(),
                   const SizedBox(height: 24),
@@ -145,40 +142,53 @@ class DashboardPage extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text('Maio de 2026', style: TextStyle(fontSize: 14, color: _textMuted)),
-        // O container antigo do "Pro" foi removido daqui para limpar o visual
       ],
     );
   }
 
-  Widget _buildAddButton() {
-    return Column(
-      children: [
-        Container(
-          width: 64,
-          height: 64,
-          decoration: BoxDecoration(
-            color: _green,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: _green.withValues(alpha: 0.35),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+  // Alterado: Adicionado o parâmetro 'BuildContext context' e o widget InkWell
+  Widget _buildAddButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // Envia o usuário para a AddDespesasPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Adddespesas()),
+        );
+      },
+      borderRadius: BorderRadius.circular(16), // Efeito visual controlado
+      child: Padding(
+        padding: const EdgeInsets.all(8.0), // Melhora a área de toque
+        child: Column(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: _green,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: _green.withValues(alpha: 0.35),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 34),
+              child: const Icon(Icons.add_rounded, color: Colors.white, size: 34),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Adicionar Despesa',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: _textMuted,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        const Text(
-          'Adicionar Despesa',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: _textMuted,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
