@@ -153,22 +153,7 @@ class DashboardPage extends StatelessWidget {
             color: _textMuted,
           ),
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-          decoration: BoxDecoration(
-            color: _greenLight,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Text(
-            'Pro',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: _green,
-            ),
-          ),
-        ),
+        // O container antigo do "Pro" foi removido daqui para limpar o visual
       ],
     );
   }
@@ -209,26 +194,13 @@ class DashboardPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Categorias',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: _textDark,
-              ),
-            ),
-            Text(
-              'Ver todas',
-              style: TextStyle(
-                fontSize: 13,
-                color: _green,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
+        const Text(
+          'Categorias',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: _textDark,
+          ),
         ),
         const SizedBox(height: 14),
         GridView.builder(
