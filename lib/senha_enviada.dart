@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'config.dart';
+import 'login_app.dart';
 
 void main() {
   runApp(const SenhaEnviadaApp());
@@ -69,6 +70,18 @@ class SenhaEnviadaPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF68D391),
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+            (route) => false,
+          );
+        },
+        child: const Icon(Icons.arrow_back, color: Colors.white),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
@@ -100,31 +113,7 @@ class SenhaEnviadaPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 42),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Builder(
-                          builder: (context) {
-                            final buttonSize = width * 0.15;
-                            final iconSize = buttonSize * 0.35;
-
-                            return Container(
-                              width: buttonSize.clamp(80.0, 130.0),
-                              height: buttonSize.clamp(80.0, 130.0),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFF68D391),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                  size: iconSize.clamp(24.0, 40.0),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      const SizedBox(height: 80),
                     ],
                   ),
                 ),

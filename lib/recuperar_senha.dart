@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'config.dart';
+import 'senha_enviada.dart';
 
 void main() {
   runApp(const RecuperarSenhaApp());
@@ -121,7 +122,13 @@ class RecuperarSenhaPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const SenhaEnviadaPage(),
+                          ),
+                        );
+                      },
                       child: const Text('Enviar senha provisória'),
                     ),
                   ),
