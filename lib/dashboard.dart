@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'config.dart';
+
 void main() {
   runApp(
     const MaterialApp(debugShowCheckedModeBanner: false, home: DashboardPage()),
@@ -60,7 +62,11 @@ class DashboardPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),

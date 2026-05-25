@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 
-import 'config.dart';
+import 'dashboard.dart';
+import 'login_app.dart';
 
 void main() {
-  runApp(const RecuperarSenhaApp());
+  runApp(const ConfigApp());
 }
 
-class RecuperarSenhaApp extends StatelessWidget {
-  const RecuperarSenhaApp({super.key});
+class ConfigApp extends StatelessWidget {
+  const ConfigApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Recuperar Senha',
-      home: const RecuperarSenhaPage(),
+      title: 'Configurações',
+      home: const ConfigPage(),
     );
   }
 }
 
-class RecuperarSenhaPage extends StatelessWidget {
-  const RecuperarSenhaPage({super.key});
+class ConfigPage extends StatelessWidget {
+  const ConfigPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +54,7 @@ class RecuperarSenhaPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
-              },
+              onPressed: () {},
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
@@ -68,7 +65,11 @@ class RecuperarSenhaPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF68D391),
         shape: const CircleBorder(),
-        onPressed: () => Navigator.of(context).maybePop(),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const DashboardPage()),
+          );
+        },
         child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SafeArea(
@@ -82,7 +83,7 @@ class RecuperarSenhaPage extends StatelessWidget {
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    'Recuperar Senha',
+                    'Configurações',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -91,25 +92,24 @@ class RecuperarSenhaPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 28),
-                  SizedBox(
-                    width: width > 360 ? 340 : width * 0.85,
-                    child: TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'e-mail',
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFFF0F0F0),
-                      ),
-                    ),
+                  _buildOptionTile(
+                    icon: Icons.person,
+                    title: 'Gerenciamento de perfil',
+                    onTap: () {},
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 16),
+                  _buildOptionTile(
+                    icon: Icons.security,
+                    title: 'Segurança e privacidade',
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 16),
+                  _buildOptionTile(
+                    icon: Icons.info,
+                    title: 'Sobre o aplicativo',
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 28),
                   SizedBox(
                     width: width > 360 ? 280 : width * 0.7,
                     height: 46,
@@ -121,39 +121,61 @@ class RecuperarSenhaPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {},
-                      child: const Text('Enviar senha provisória'),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Container(
-                    width: width > 360 ? 340 : width * 0.85,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEAF8EF),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.mark_email_read_rounded,
-                          color: Color(0xFF68D391),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Confira sua caixa de entrada e também o spam.',
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const LoginAppPage(),
                           ),
-                        ),
-                      ],
+                          (route) => false,
+                        );
+                      },
+                      child: const Text('Sair'),
                     ),
                   ),
-                  const SizedBox(height: 32),
                   const SizedBox(height: 120),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE0E0E0)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xCC42AC27), size: 24),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Color(0xCC42AC27),
+              size: 16,
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'config.dart';
+import 'dashboard.dart';
 import 'recuperar_senha.dart';
 
 void main() {
@@ -29,6 +31,11 @@ class LoginAppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    void openDashboard() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const DashboardPage()),
+      );
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
@@ -57,7 +64,11 @@ class LoginAppPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
@@ -124,12 +135,21 @@ class LoginAppPage extends StatelessWidget {
                   const SizedBox(height: 26),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      _SocialLoginButton(icon: Icons.g_mobiledata_rounded),
-                      SizedBox(width: 22),
-                      _SocialLoginButton(icon: Icons.apple_rounded),
-                      SizedBox(width: 22),
-                      _SocialLoginButton(icon: Icons.facebook_rounded),
+                    children: [
+                      _SocialLoginButton(
+                        icon: Icons.g_mobiledata_rounded,
+                        onPressed: openDashboard,
+                      ),
+                      const SizedBox(width: 22),
+                      _SocialLoginButton(
+                        icon: Icons.apple_rounded,
+                        onPressed: openDashboard,
+                      ),
+                      const SizedBox(width: 22),
+                      _SocialLoginButton(
+                        icon: Icons.facebook_rounded,
+                        onPressed: openDashboard,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 28),
@@ -144,7 +164,7 @@ class LoginAppPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: openDashboard,
                       child: const Text('Login'),
                     ),
                   ),
@@ -182,9 +202,10 @@ class LoginAppPage extends StatelessWidget {
 }
 
 class _SocialLoginButton extends StatelessWidget {
-  const _SocialLoginButton({required this.icon});
+  const _SocialLoginButton({required this.icon, required this.onPressed});
 
   final IconData icon;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +220,7 @@ class _SocialLoginButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(icon, size: 30),
       ),
     );
