@@ -1,4 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+import 'config.dart';
+import 'login_app.dart';
 
 void main() {
   runApp(const CadastroEfetuadoApp());
@@ -28,8 +31,6 @@ class CadastroEfetuadoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isLarge = width >= 400;
-    final buttonSize = (width * 0.14).clamp(84.0, 110.0);
-
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
       appBar: PreferredSize(
@@ -57,12 +58,27 @@ class CadastroEfetuadoPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF68D391),
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+          );
+        },
+        child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SafeArea(
         child: Padding(
@@ -92,22 +108,6 @@ class CadastroEfetuadoPage extends StatelessWidget {
                           color: Color(0xFF6B6B6B),
                           fontSize: 16,
                           height: 1.6,
-                        ),
-                      ),
-                      const SizedBox(height: 42),
-                      Container(
-                        width: buttonSize,
-                        height: buttonSize,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF68D391),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                            size: (buttonSize * 0.35).clamp(24.0, 36.0),
-                          ),
                         ),
                       ),
                     ],

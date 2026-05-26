@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'config.dart';
 import 'dashboard.dart';
+import 'fazer_cadastro.dart';
 import 'recuperar_senha.dart';
 
 void main() {
@@ -33,7 +34,8 @@ class LoginAppPage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     void openDashboard() {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const DashboardScreen       ()),      );
+        MaterialPageRoute(builder: (_) => const DashboardPage()),
+      );
     }
 
     return Scaffold(
@@ -169,7 +171,13 @@ class LoginAppPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const FazerCadastroPage(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       'Fazer cadastro',
                       style: TextStyle(color: Colors.black, fontSize: 18),

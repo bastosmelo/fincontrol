@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// IMPORTANTE: Certifique-se de que o arquivo dashboard.dart existe na sua pasta lib
-import 'dashboard.dart'; 
+
+import 'config.dart';
+import 'dashboard.dart';
 
 void main() {
-  runApp(const Adddespesas());
+  runApp(
+    const MaterialApp(debugShowCheckedModeBanner: false, home: Adddespesas()),
+  );
 }
 
 class Adddespesas extends StatelessWidget {
   const Adddespesas({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF1FAF5),
-        fontFamily: 'sans-serif',
-      ),
-      home: const ExpenseFormScreen(),
-    );
-  }
+  Widget build(BuildContext context) => const ExpenseFormScreen();
 }
 
 class ExpenseFormScreen extends StatefulWidget {
@@ -49,42 +43,58 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   @override
   Widget build(BuildContext context) {
     const primaryGreen = Color(0xFF2E7D56);
-    const textGreen = Color(0xFF3B8E5D);
     const inputTextColor = Color(0xFF1E3A2B);
     const actionButtonColor = Color(0xFF62D397);
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: [
-              Icon(Icons.bar_chart, color: textGreen, size: 28),
-            ],
+      backgroundColor: const Color(0xFFF0FFF4),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          backgroundColor: const Color(0xFFF0FFF4),
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'FinControl',
+            style: TextStyle(
+              color: const Color(0xCC42AC27),
+              fontSize: width > 400 ? 26 : 20,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Image.asset(
+              'assets/fincontrol-logo.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
+              icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
+            ),
+            const SizedBox(width: 6),
+          ],
         ),
-        title: const Text(
-          'FinControl',
-          style: TextStyle(
-            color: textGreen,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black87, size: 28),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black87, size: 24),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8),
-        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF68D391),
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const DashboardPage()),
+          );
+        },
+        child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -130,15 +140,24 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
                       child: Row(
                         children: [
                           const Expanded(
                             child: TextField(
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                               decoration: InputDecoration(
                                 hintText: 'Grupo',
-                                hintStyle: TextStyle(color: inputTextColor, fontSize: 18),
+                                hintStyle: TextStyle(
+                                  color: inputTextColor,
+                                  fontSize: 18,
+                                ),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -173,16 +192,21 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                       clipBehavior: Clip.antiAlias,
                       decoration: const BoxDecoration(
                         color: Color(0xFF235E41),
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(12),
+                        ),
                       ),
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 16,
+                        ),
                         itemCount: _iconsList.length,
                         itemBuilder: (context, index) {
                           final icon = _iconsList[index];
                           final isSelected = _selectedIcon == icon;
-                          
+
                           return GestureDetector(
                             onTap: () {
                               setState(() {
@@ -194,12 +218,16 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                               margin: const EdgeInsets.symmetric(horizontal: 8),
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: isSelected ? Colors.white24 : Colors.transparent,
+                                color: isSelected
+                                    ? Colors.white24
+                                    : Colors.transparent,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
                                 icon,
-                                color: isSelected ? actionButtonColor : Colors.white,
+                                color: isSelected
+                                    ? actionButtonColor
+                                    : Colors.white,
                                 size: 28,
                               ),
                             ),
@@ -214,7 +242,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
               // Campo: Nome da despesa
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: primaryGreen,
                   borderRadius: BorderRadius.circular(12),
@@ -233,7 +264,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
               // Campo: Valor da despesa
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: primaryGreen,
                   borderRadius: BorderRadius.circular(12),
@@ -257,48 +291,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               const SizedBox(height: 40),
 
               // Botão de Confirmação (Check)
-              InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    color: actionButtonColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.black87,
-                    size: 36,
-                  ),
-                ),
+              FloatingActionButton(
+                heroTag: 'confirmExpense',
+                backgroundColor: const Color(0xFF68D391),
+                shape: const CircleBorder(),
+                onPressed: () {},
+                child: const Icon(Icons.check, color: Colors.white),
               ),
-              const SizedBox(height: 24),
-
-              // Botão de Voltar (Direcionando para o Dashboard)
-              InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const Adddespesas()),
-                  );
-                },
-                borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    color: actionButtonColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.black87,
-                    size: 32,
-                  ),
-                ),
-              ),
+              const SizedBox(height: 120),
             ],
           ),
         ),
@@ -310,7 +310,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 // Formatador de Moeda (Ponto e Vírgula) manual
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.selection.baseOffset == 0) {
       return newValue;
     }
@@ -318,14 +321,14 @@ class CurrencyInputFormatter extends TextInputFormatter {
     String digitsOnly = newValue.text;
     double value = double.parse(digitsOnly) / 100;
     String text = value.toStringAsFixed(2);
-    
+
     List<String> parts = text.split('.');
     String inteira = parts[0];
     String centavos = parts[1];
-    
+
     final RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
     inteira = inteira.replaceAllMapped(reg, (Match match) => '${match[1]}.');
-    
+
     String newText = '$inteira,$centavos';
 
     return newValue.copyWith(

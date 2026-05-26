@@ -19,19 +19,19 @@ class FigmaToCodeApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF0FFF4),
       ),
-      home: const LoginPrototypeScreen(),
+      home: const StartPage(),
     );
   }
 }
 
-class LoginPrototypeScreen extends StatefulWidget {
-  const LoginPrototypeScreen({super.key});
+class StartPage extends StatefulWidget {
+  const StartPage({super.key});
 
   @override
-  State<LoginPrototypeScreen> createState() => _LoginPrototypeScreenState();
+  State<StartPage> createState() => _StartPageState();
 }
 
-class _LoginPrototypeScreenState extends State<LoginPrototypeScreen> {
+class _StartPageState extends State<StartPage> {
   Timer? _timer;
 
   static const _background = Color(0xFFF0FFF4);

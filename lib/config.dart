@@ -67,7 +67,7 @@ class ConfigPage extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const DashboardScreen()),
+            MaterialPageRoute(builder: (_) => const DashboardPage()),
           );
         },
         child: const Icon(Icons.arrow_back, color: Colors.white),

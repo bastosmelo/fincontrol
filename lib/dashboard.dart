@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-// 1. Importe o arquivo da nova página aqui
-import 'adddespesas.dart'; 
+
+import 'adddespesas.dart';
+import 'config.dart';
 
 void main() {
   runApp(
@@ -62,7 +63,11 @@ class DashboardPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
@@ -92,7 +97,7 @@ class DashboardPage extends StatelessWidget {
                   _buildProfileSection(),
                   const SizedBox(height: 28),
                   // Passamos o contexto para a função do botão conseguir navegar
-                  _buildAddButton(context), 
+                  _buildAddButton(context),
                   const SizedBox(height: 32),
                   _buildCategoriesSection(),
                   const SizedBox(height: 24),
@@ -175,7 +180,11 @@ class DashboardPage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(Icons.add_rounded, color: Colors.white, size: 34),
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+                size: 34,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(

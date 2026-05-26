@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'cadastro_efetuado.dart';
+import 'config.dart';
+import 'login_app.dart';
+
 void main() {
   runApp(const FazerCadastroApp());
 }
@@ -57,12 +61,27 @@ class FazerCadastroPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF68D391),
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+          );
+        },
+        child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -105,33 +124,20 @@ class FazerCadastroPage extends StatelessWidget {
                         ),
                         elevation: 0,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const CadastroEfetuadoPage(),
+                          ),
+                        );
+                      },
                       child: const Text(
                         'Efetivar cadastro',
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).maybePop(),
-                    child: Container(
-                      width: (width * 0.14).clamp(84.0, 110.0),
-                      height: (width * 0.14).clamp(84.0, 110.0),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFF68D391),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 34,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 120),
                 ],
               ),
             ),
@@ -154,7 +160,10 @@ class FazerCadastroPage extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(color: Color(0xFF8E8E8E)),
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 18,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: BorderSide.none,
