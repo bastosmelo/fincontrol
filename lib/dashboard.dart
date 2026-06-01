@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'adddespesas.dart';
 import 'config.dart';
+import 'resumodespesas.dart';
 
 void main() {
   runApp(
@@ -226,39 +227,53 @@ class DashboardPage extends StatelessWidget {
           itemCount: _categories.length,
           itemBuilder: (context, i) {
             final cat = _categories[i];
-            return Container(
-              decoration: BoxDecoration(
-                color: _cardBg,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFE8EDE8)),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: _greenLight,
-                      borderRadius: BorderRadius.circular(12),
+            final label = cat['label'] as String;
+
+            return InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: label == 'Moradia'
+                  ? () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ResumoDespesasPage(),
+                        ),
+                      );
+                    }
+                  : null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _cardBg,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE8EDE8)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: _greenLight,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        cat['icon'] as IconData,
+                        color: _green,
+                        size: 20,
+                      ),
                     ),
-                    child: Icon(
-                      cat['icon'] as IconData,
-                      color: _green,
-                      size: 20,
+                    const SizedBox(height: 7),
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: _textDark,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 7),
-                  Text(
-                    cat['label'] as String,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: _textDark,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
