@@ -65,22 +65,29 @@ class ResumoDespesasPage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: _buttonGreen,
-        shape: const CircleBorder(),
-        elevation: 0,
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const DashboardPage()),
-          );
-        },
-        child: const Icon(Icons.arrow_back, color: _textDark, size: 34),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 8, 14, 18),
+          child: Center(
+            heightFactor: 1,
+            child: FloatingActionButton(
+              backgroundColor: _buttonGreen,
+              shape: const CircleBorder(),
+              elevation: 0,
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const DashboardPage()),
+                );
+              },
+              child: const Icon(Icons.arrow_back, color: _textDark, size: 34),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 104),
+          padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 430),

@@ -85,20 +85,38 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF68D391),
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const DashboardPage()),
-          );
-        },
-        child: const Icon(Icons.arrow_back, color: Colors.white),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FloatingActionButton(
+                heroTag: 'backToDashboard',
+                backgroundColor: const Color(0xFF68D391),
+                shape: const CircleBorder(),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const DashboardPage()),
+                  );
+                },
+                child: const Icon(Icons.arrow_back, color: Colors.white),
+              ),
+              const SizedBox(width: 28),
+              FloatingActionButton(
+                heroTag: 'confirmExpense',
+                backgroundColor: const Color(0xFF68D391),
+                shape: const CircleBorder(),
+                onPressed: () {},
+                child: const Icon(Icons.check, color: Colors.white),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -286,17 +304,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // Botão de Confirmação (Check)
-              FloatingActionButton(
-                heroTag: 'confirmExpense',
-                backgroundColor: const Color(0xFF68D391),
-                shape: const CircleBorder(),
-                onPressed: () {},
-                child: const Icon(Icons.check, color: Colors.white),
-              ),
-              const SizedBox(height: 120),
+              const SizedBox(height: 24),
             ],
           ),
         ),
