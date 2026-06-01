@@ -112,9 +112,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   ),
                   child: const CircleAvatar(
                     radius: 55,
-                    backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
-                    ),
+                    backgroundImage: AssetImage('assets/perfil.jpeg'),
                   ),
                 ),
               ),

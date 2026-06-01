@@ -117,7 +117,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 52,
-              backgroundImage: const NetworkImage('https://i.pravatar.cc/300'),
+              backgroundImage: const AssetImage('assets/perfil.jpeg'),
               backgroundColor: _greenLight,
             ),
             Positioned(
