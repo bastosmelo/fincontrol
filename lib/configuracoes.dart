@@ -32,7 +32,7 @@ class _ConfigPageState extends State<ConfigPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
+    return Scaffold(a
       backgroundColor: const Color(0xFFF0FFF4),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
