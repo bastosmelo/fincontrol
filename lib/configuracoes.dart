@@ -94,17 +94,19 @@ class _ConfigPageState extends State<ConfigPage> {
                   const SizedBox(height: 28),
 
                   // Gerenciamento de perfil (sanfona)
-                  _buildProfileAccordion(width),
+                  buildProfileAccordion(width),
                   const SizedBox(height: 16),
 
-                  _buildOptionTile(
+                  buildOptionTile(
                     icon: Icons.security,
                     title: 'Segurança e privacidade',
                     onTap: () {},
                   ),
                   const SizedBox(height: 16),
-                  _buildSobreAccordion(width),
+
+                  buildSobreAccordion(width),
                   const SizedBox(height: 28),
+
                   SizedBox(
                     width: width > 360 ? 280 : width * 0.7,
                     height: 46,
@@ -130,7 +132,7 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 
-  Widget _buildProfileAccordion(double width) {
+  Widget buildProfileAccordion(double width) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -143,9 +145,9 @@ class _ConfigPageState extends State<ConfigPage> {
           initiallyExpanded: perfilExpanded,
           onExpansionChanged: (v) => setState(() => perfilExpanded = v),
           leading: Icon(Icons.person, color: const Color(0xCC42AC27)),
-          title: Text(
+          title: const Text(
             'Gerenciamento de perfil',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -199,7 +201,7 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 
-  Widget _buildSobreAccordion(double width) {
+  Widget buildSobreAccordion(double width) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -210,9 +212,9 @@ class _ConfigPageState extends State<ConfigPage> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           leading: Icon(Icons.info, color: const Color(0xCC42AC27)),
-          title: Text(
+          title: const Text(
             'Sobre o aplicativo',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -249,7 +251,7 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 
-  Widget _buildOptionTile({
+  Widget buildOptionTile({
     required IconData icon,
     required String title,
     required VoidCallback onTap,
@@ -288,4 +290,3 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 }
-

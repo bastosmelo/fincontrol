@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
-import 'cadastro_efetuado.dart';
-import 'config.dart';
+
+import 'dashboard.dart';
 import 'login_app.dart';
 
 void main() {
-  runApp(const FazerCadastroApp());
+  runApp(const ConfigApp());
 }
 
-class FazerCadastroApp extends StatelessWidget {
-  const FazerCadastroApp({super.key});
+class ConfigApp extends StatelessWidget {
+  const ConfigApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Cadastro',
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF0FFF4),
-        useMaterial3: true,
-      ),
-      home: const FazerCadastroPage(),
+      title: 'Configurações',
+      home: const ConfigPage(),
     );
   }
 }
 
-class FazerCadastroPage extends StatelessWidget {
-  const FazerCadastroPage({super.key});
+class ConfigPage extends StatelessWidget {
+  const ConfigPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final isLarge = width >= 400;
-    final fieldWidth = width > 360 ? 340.0 : width * 0.88;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
@@ -60,11 +54,7 @@ class FazerCadastroPage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
-              },
+              onPressed: () {},
               icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
             ),
             const SizedBox(width: 6),
@@ -77,63 +67,69 @@ class FazerCadastroPage extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+            MaterialPageRoute(builder: (_) => const DashboardPage()),
           );
         },
         child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   Text(
-                    'Cadastro',
+                    'Configurações',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: isLarge ? 28 : 24,
+                      fontSize: width > 400 ? 32 : 26,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  _buildField(width: fieldWidth, hint: 'e-mail'),
+                  const SizedBox(height: 28),
+                  _buildOptionTile(
+                    icon: Icons.person,
+                    title: 'Gerenciamento de perfil',
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 16),
-                  _buildField(width: fieldWidth, hint: 'repetir e-mail'),
+                  _buildOptionTile(
+                    icon: Icons.security,
+                    title: 'Segurança e privacidade',
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 16),
-                  _buildField(
-                    width: fieldWidth,
-                    hint: 'Senha',
-                    obscureText: true,
+                  _buildOptionTile(
+                    icon: Icons.info,
+                    title: 'Sobre o aplicativo',
+                    onTap: () {},
                   ),
                   const SizedBox(height: 28),
                   SizedBox(
-                    width: fieldWidth,
-                    height: 52,
+                    width: width > 360 ? 280 : width * 0.7,
+                    height: 46,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFD9D9D9),
+                        backgroundColor: const Color(0xFFE0E0E0),
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0,
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(
+                        Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                            builder: (_) => const CadastroEfetuadoPage(),
+                            builder: (_) => const LoginAppPage(),
                           ),
+                          (route) => false,
                         );
                       },
-                      child: const Text(
-                        'Efetivar cadastro',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
+                      child: const Text('Sair'),
                     ),
                   ),
                   const SizedBox(height: 120),
@@ -146,29 +142,40 @@ class FazerCadastroPage extends StatelessWidget {
     );
   }
 
-  Widget _buildField({
-    required double width,
-    required String hint,
-    bool obscureText = false,
+  Widget _buildOptionTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
   }) {
-    return SizedBox(
-      width: width,
-      height: 56,
-      child: TextField(
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Color(0xFF8E8E8E)),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 18,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: const Color(0xFFD9D9D9),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE0E0E0)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xCC42AC27), size: 24),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Color(0xCC42AC27),
+              size: 16,
+            ),
+          ],
         ),
       ),
     );

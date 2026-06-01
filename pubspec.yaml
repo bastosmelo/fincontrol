@@ -63,6 +63,7 @@ flutter:
     - assets/Google.jpg
     - assets/Facebook.jpg
     - assets/Apple.png
+    - assets/perfil.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

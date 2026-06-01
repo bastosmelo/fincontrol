@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
+
 import 'config.dart';
 import 'login_app.dart';
+
 void main() {
-  runApp(const SenhaEnviadaApp());
+  runApp(const CadastroEfetuadoApp());
 }
 
-class SenhaEnviadaApp extends StatelessWidget {
-  const SenhaEnviadaApp({super.key});
+class CadastroEfetuadoApp extends StatelessWidget {
+  const CadastroEfetuadoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Senha Enviada',
+      title: 'Cadastro Efetuado',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFF0FFF4),
         useMaterial3: true,
       ),
-      home: const SenhaEnviadaPage(),
+      home: const CadastroEfetuadoPage(),
     );
   }
 }
 
-class SenhaEnviadaPage extends StatelessWidget {
-  const SenhaEnviadaPage({super.key});
+class CadastroEfetuadoPage extends StatelessWidget {
+  const CadastroEfetuadoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isLarge = width >= 400;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
       appBar: PreferredSize(
@@ -73,9 +74,8 @@ class SenhaEnviadaPage extends StatelessWidget {
         backgroundColor: const Color(0xFF68D391),
         shape: const CircleBorder(),
         onPressed: () {
-          Navigator.of(context).pushAndRemoveUntil(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const LoginAppPage()),
-            (route) => false,
           );
         },
         child: const Icon(Icons.arrow_back, color: Colors.white),
@@ -92,7 +92,7 @@ class SenhaEnviadaPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Senha enviada com sucesso',
+                        'Cadastro efetuado com sucesso',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -102,7 +102,7 @@ class SenhaEnviadaPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const Text(
-                        'Confira seu e-mail para recuperar o acesso à sua conta.',
+                        'Seu cadastro foi concluído com sucesso.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFF6B6B6B),
@@ -110,8 +110,6 @@ class SenhaEnviadaPage extends StatelessWidget {
                           height: 1.6,
                         ),
                       ),
-                      const SizedBox(height: 42),
-                      const SizedBox(height: 80),
                     ],
                   ),
                 ),

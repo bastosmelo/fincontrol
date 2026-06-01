@@ -1,0 +1,399 @@
+import 'package:flutter/material.dart';
+
+import 'adddespesas.dart';
+import 'config.dart';
+import 'resumodespesas.dart';
+
+void main() {
+  runApp(
+    const MaterialApp(debugShowCheckedModeBanner: false, home: DashboardPage()),
+  );
+}
+
+class DashboardCategory {
+  const DashboardCategory({
+    required this.icon,
+    required this.label,
+    this.expenses = const [],
+  });
+
+  final IconData icon;
+  final String label;
+  final List<DashboardExpense> expenses;
+}
+
+class DashboardExpense {
+  const DashboardExpense({required this.name, required this.value});
+
+  final String name;
+  final String value;
+}
+
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
+  static const _green = Color(0xFF2E7D32);
+  static const _greenLight = Color(0xFFF1F8E9);
+  static const _greenMid = Color(0xFF4CAF50);
+  static const _bg = Color(0xFFF0FFF4);
+  static const _cardBg = Colors.white;
+  static const _textDark = Color(0xFF1B2D1C);
+  static const _textMuted = Color(0xFF7A8F7B);
+
+  static const _defaultCategories = [
+    DashboardCategory(icon: Icons.home_outlined, label: 'Moradia'),
+    DashboardCategory(icon: Icons.build_outlined, label: 'Reforma'),
+    DashboardCategory(icon: Icons.school_outlined, label: 'Educação'),
+    DashboardCategory(icon: Icons.directions_car_outlined, label: 'Transporte'),
+    DashboardCategory(icon: Icons.restaurant_outlined, label: 'Alimentação'),
+    DashboardCategory(icon: Icons.favorite_outline, label: 'Saúde'),
+    DashboardCategory(icon: Icons.shopping_bag_outlined, label: 'Compras'),
+    DashboardCategory(icon: Icons.bar_chart_outlined, label: 'Relatórios'),
+  ];
+  static final List<DashboardCategory> _createdCategories = [];
+  static final Set<String> _hiddenDefaultCategoryLabels = {};
+
+  static List<DashboardCategory> get _categories => [
+    ..._defaultCategories.where(
+      (category) =>
+          !_hiddenDefaultCategoryLabels.contains(category.label.toLowerCase()),
+    ),
+    ..._createdCategories,
+  ];
+
+  static void addExpenseCategory({
+    required String label,
+    required IconData icon,
+    required String expenseName,
+    required String expenseValue,
+  }) {
+    final normalizedLabel = label.trim();
+    final normalizedExpenseName = expenseName.trim();
+    final normalizedExpenseValue = expenseValue.trim();
+
+    if (normalizedLabel.isEmpty) {
+      return;
+    }
+
+    final expense = DashboardExpense(
+      name: normalizedExpenseName.isEmpty
+          ? normalizedLabel
+          : normalizedExpenseName,
+      value: normalizedExpenseValue.isEmpty
+          ? 'R\$ 0,00'
+          : 'R\$ $normalizedExpenseValue',
+    );
+    final existingIndex = _createdCategories.indexWhere(
+      (category) =>
+          category.label.toLowerCase() == normalizedLabel.toLowerCase(),
+    );
+
+    if (existingIndex >= 0) {
+      final existingCategory = _createdCategories[existingIndex];
+      _createdCategories[existingIndex] = DashboardCategory(
+        icon: existingCategory.icon,
+        label: existingCategory.label,
+        expenses: [...existingCategory.expenses, expense],
+      );
+      return;
+    }
+
+    _createdCategories.add(
+      DashboardCategory(
+        icon: icon,
+        label: normalizedLabel,
+        expenses: [expense],
+      ),
+    );
+  }
+
+  static void updateExpenseCategory({
+    required String label,
+    required List<DashboardExpense> expenses,
+  }) {
+    final existingIndex = _createdCategories.indexWhere(
+      (category) => category.label.toLowerCase() == label.toLowerCase(),
+    );
+
+    if (existingIndex < 0) {
+      return;
+    }
+
+    if (expenses.isEmpty) {
+      _createdCategories.removeAt(existingIndex);
+      return;
+    }
+
+    final existingCategory = _createdCategories[existingIndex];
+    _createdCategories[existingIndex] = DashboardCategory(
+      icon: existingCategory.icon,
+      label: existingCategory.label,
+      expenses: expenses,
+    );
+  }
+
+  static void removeExpenseCategory(String label) {
+    final normalizedLabel = label.trim().toLowerCase();
+
+    _createdCategories.removeWhere(
+      (category) => category.label.toLowerCase() == normalizedLabel,
+    );
+
+    final isDefaultCategory = _defaultCategories.any(
+      (category) => category.label.toLowerCase() == normalizedLabel,
+    );
+
+    if (isDefaultCategory) {
+      _hiddenDefaultCategoryLabels.add(normalizedLabel);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: _bg,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          backgroundColor: _bg,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'FinControl',
+            style: TextStyle(
+              color: const Color(0xCC42AC27),
+              fontSize: width > 400 ? 26 : 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Image.asset(
+              'assets/fincontrol-logo.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
+              },
+              icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
+            ),
+            const SizedBox(width: 6),
+          ],
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    'Dashboard',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: width > 400 ? 32 : 26,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  _buildProfileSection(),
+                  const SizedBox(height: 28),
+                  _buildAddButton(context),
+                  const SizedBox(height: 32),
+                  _buildCategoriesSection(),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileSection() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            const CircleAvatar(
+              radius: 52,
+              backgroundImage: AssetImage('assets/perfil.jpeg'),
+              backgroundColor: _greenLight,
+            ),
+            Positioned(
+              bottom: 2,
+              right: 2,
+              child: Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: _greenMid,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        const Text(
+          'Francisco Duarte',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: _textDark,
+            letterSpacing: -0.3,
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Maio de 2026',
+          style: TextStyle(fontSize: 14, color: _textMuted),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAddButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Adddespesas()),
+        );
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: _green,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: _green.withValues(alpha: 0.35),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+                size: 34,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Adicionar Despesa',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: _textMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoriesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Categorias',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: _textDark,
+          ),
+        ),
+        const SizedBox(height: 14),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1,
+          ),
+          itemCount: _categories.length,
+          itemBuilder: (context, i) {
+            final cat = _categories[i];
+            final label = cat.label;
+
+            return InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: label == 'Moradia' || cat.expenses.isNotEmpty
+                  ? () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ResumoDespesasPage(
+                            categoryLabel: label,
+                            icon: cat.icon,
+                            expenses: cat.expenses,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _cardBg,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE8EDE8)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: _greenLight,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(cat.icon, color: _green, size: 20),
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: _textDark,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
