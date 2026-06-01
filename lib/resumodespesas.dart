@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'config.dart';
 import 'dashboard.dart';
-import 'login_app.dart';
 
 void main() {
   runApp(
@@ -31,7 +30,7 @@ class ResumoDespesasPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: _background,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(64),
+        preferredSize: const Size.fromHeight(80),
         child: AppBar(
           backgroundColor: _background,
           elevation: 0,
@@ -40,32 +39,17 @@ class ResumoDespesasPage extends StatelessWidget {
             'FinControl',
             style: TextStyle(
               color: _brandGreen,
-              fontSize: width > 360 ? 24 : 21,
-              fontWeight: FontWeight.w600,
+              fontSize: width > 400 ? 26 : 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          leadingWidth: 62,
           leading: Padding(
-            padding: const EdgeInsets.only(left: 18, top: 8, bottom: 4),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/fincontrol-logo.png',
-                  width: 28,
-                  height: 28,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 1),
-                const Text(
-                  'FinControl',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 7,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.only(left: 12),
+            child: Image.asset(
+              'assets/fincontrol-logo.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
             ),
           ),
           actions: [
@@ -75,18 +59,9 @@ class ResumoDespesasPage extends StatelessWidget {
                   context,
                 ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
               },
-              icon: const Icon(Icons.menu, color: _textDark, size: 24),
+              icon: const Icon(Icons.menu, color: _brandGreen),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const LoginAppPage()),
-                  (route) => false,
-                );
-              },
-              icon: const Icon(Icons.logout, color: _textDark, size: 22),
-            ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
           ],
         ),
       ),
