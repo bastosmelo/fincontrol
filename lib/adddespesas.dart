@@ -27,6 +27,9 @@ class ExpenseFormScreen extends StatefulWidget {
 class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   bool _isIconMenuOpen = false;
   IconData _selectedIcon = Icons.home;
+  final _groupController = TextEditingController();
+  final _expenseNameController = TextEditingController();
+  final _expenseValueController = TextEditingController();
 
   final List<IconData> _iconsList = [
     Icons.home,
@@ -39,6 +42,37 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     Icons.shopping_bag,
     Icons.insert_chart,
   ];
+
+  @override
+  void dispose() {
+    _groupController.dispose();
+    _expenseNameController.dispose();
+    _expenseValueController.dispose();
+    super.dispose();
+  }
+
+  void _createExpense() {
+    final group = _groupController.text.trim();
+    final expenseName = _expenseNameController.text.trim();
+    final label = group.isNotEmpty ? group : expenseName;
+
+    if (label.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Preencha o grupo ou o nome da despesa.')),
+      );
+      return;
+    }
+
+    DashboardPage.addExpenseCategory(
+      label: label,
+      icon: _selectedIcon,
+      expenseName: expenseName,
+      expenseValue: _expenseValueController.text,
+    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const DashboardPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,20 +119,38 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF68D391),
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const DashboardPage()),
-          );
-        },
-        child: const Icon(Icons.arrow_back, color: Colors.white),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FloatingActionButton(
+                heroTag: 'backToDashboard',
+                backgroundColor: const Color(0xFF68D391),
+                shape: const CircleBorder(),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const DashboardPage()),
+                  );
+                },
+                child: const Icon(Icons.arrow_back, color: Colors.white),
+              ),
+              const SizedBox(width: 28),
+              FloatingActionButton(
+                heroTag: 'confirmExpense',
+                backgroundColor: const Color(0xFF68D391),
+                shape: const CircleBorder(),
+                onPressed: _createExpense,
+                child: const Icon(Icons.check, color: Colors.white),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -144,8 +196,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: TextField(
+                              controller: _groupController,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -248,10 +301,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   color: primaryGreen,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const TextField(
+                child: TextField(
+                  controller: _expenseNameController,
                   keyboardType: TextInputType.text,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                  decoration: const InputDecoration(
                     hintText: 'Nome da despesa',
                     hintStyle: TextStyle(color: inputTextColor, fontSize: 18),
                     border: InputBorder.none,
@@ -271,6 +325,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  controller: _expenseValueController,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                   inputFormatters: [
@@ -286,17 +341,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // Botão de Confirmação (Check)
-              FloatingActionButton(
-                heroTag: 'confirmExpense',
-                backgroundColor: const Color(0xFF68D391),
-                shape: const CircleBorder(),
-                onPressed: () {},
-                child: const Icon(Icons.check, color: Colors.white),
-              ),
-              const SizedBox(height: 120),
+              const SizedBox(height: 24),
             ],
           ),
         ),
