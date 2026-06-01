@@ -51,9 +51,13 @@ class DashboardPage extends StatelessWidget {
     DashboardCategory(icon: Icons.bar_chart_outlined, label: 'Relatórios'),
   ];
   static final List<DashboardCategory> _createdCategories = [];
+  static final Set<String> _hiddenDefaultCategoryLabels = {};
 
   static List<DashboardCategory> get _categories => [
-    ..._defaultCategories,
+    ..._defaultCategories.where(
+      (category) =>
+          !_hiddenDefaultCategoryLabels.contains(category.label.toLowerCase()),
+    ),
     ..._createdCategories,
   ];
 
@@ -101,6 +105,47 @@ class DashboardPage extends StatelessWidget {
         expenses: [expense],
       ),
     );
+  }
+
+  static void updateExpenseCategory({
+    required String label,
+    required List<DashboardExpense> expenses,
+  }) {
+    final existingIndex = _createdCategories.indexWhere(
+      (category) => category.label.toLowerCase() == label.toLowerCase(),
+    );
+
+    if (existingIndex < 0) {
+      return;
+    }
+
+    if (expenses.isEmpty) {
+      _createdCategories.removeAt(existingIndex);
+      return;
+    }
+
+    final existingCategory = _createdCategories[existingIndex];
+    _createdCategories[existingIndex] = DashboardCategory(
+      icon: existingCategory.icon,
+      label: existingCategory.label,
+      expenses: expenses,
+    );
+  }
+
+  static void removeExpenseCategory(String label) {
+    final normalizedLabel = label.trim().toLowerCase();
+
+    _createdCategories.removeWhere(
+      (category) => category.label.toLowerCase() == normalizedLabel,
+    );
+
+    final isDefaultCategory = _defaultCategories.any(
+      (category) => category.label.toLowerCase() == normalizedLabel,
+    );
+
+    if (isDefaultCategory) {
+      _hiddenDefaultCategoryLabels.add(normalizedLabel);
+    }
   }
 
   @override
