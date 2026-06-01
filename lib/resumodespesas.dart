@@ -13,7 +13,16 @@ void main() {
 }
 
 class ResumoDespesasPage extends StatelessWidget {
-  const ResumoDespesasPage({super.key});
+  const ResumoDespesasPage({
+    super.key,
+    this.categoryLabel = 'Moradia',
+    this.icon = Icons.home_outlined,
+    this.expenses = const [],
+  });
+
+  final String categoryLabel;
+  final IconData icon;
+  final List<DashboardExpense> expenses;
 
   static const _background = Color(0xFFF0FFF4);
   static const _brandGreen = Color(0xCC42AC27);
@@ -22,10 +31,45 @@ class ResumoDespesasPage extends StatelessWidget {
   static const _textDark = Color(0xFF13251D);
   static const _textMuted = Color(0xFF607265);
   static const _expenseRed = Color(0xFFD00000);
+  static const _defaultExpenses = [
+    DashboardExpense(name: 'Conta de Energia', value: 'R\$ 300,00'),
+    DashboardExpense(name: 'Conta de Água', value: 'R\$ 270,00'),
+    DashboardExpense(name: 'Registro do chuveiro', value: 'R\$ 50,00'),
+  ];
+
+  static double _parseCurrency(String value) {
+    final normalized = value
+        .replaceAll('R\$', '')
+        .replaceAll('-', '')
+        .replaceAll('.', '')
+        .replaceAll(',', '.')
+        .trim();
+
+    return double.tryParse(normalized) ?? 0;
+  }
+
+  static String _formatCurrency(double value) {
+    final parts = value.toStringAsFixed(2).split('.');
+    final integer = parts[0].replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (match) => '${match[1]}.',
+    );
+
+    return 'R\$ $integer,${parts[1]}';
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final displayExpenses = expenses.isEmpty ? _defaultExpenses : expenses;
+    final totalText = expenses.isEmpty
+        ? 'R\$ 620,00'
+        : _formatCurrency(
+            displayExpenses.fold<double>(
+              0,
+              (total, expense) => total + _parseCurrency(expense.value),
+            ),
+          );
 
     return Scaffold(
       backgroundColor: _background,
@@ -110,9 +154,16 @@ class ResumoDespesasPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 28),
-                  const _TotalSummary(),
+                  _TotalSummary(
+                    categoryLabel: categoryLabel,
+                    totalText: totalText,
+                  ),
                   const SizedBox(height: 18),
-                  const _ExpenseSummaryCard(),
+                  _DynamicExpenseSummaryCard(
+                    categoryLabel: categoryLabel,
+                    icon: icon,
+                    items: displayExpenses,
+                  ),
                 ],
               ),
             ),
@@ -124,7 +175,10 @@ class ResumoDespesasPage extends StatelessWidget {
 }
 
 class _TotalSummary extends StatelessWidget {
-  const _TotalSummary();
+  const _TotalSummary({required this.categoryLabel, required this.totalText});
+
+  final String categoryLabel;
+  final String totalText;
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +190,13 @@ class _TotalSummary extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFDDEBDF)),
       ),
-      child: const Row(
+      child: Row(
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Resumo da categoria',
                   style: TextStyle(
                     color: ResumoDespesasPage._textMuted,
@@ -150,10 +204,10 @@ class _TotalSummary extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'Moradia',
-                  style: TextStyle(
+                  categoryLabel,
+                  style: const TextStyle(
                     color: ResumoDespesasPage._textDark,
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
@@ -165,7 +219,7 @@ class _TotalSummary extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
+              const Text(
                 'Total gasto',
                 style: TextStyle(
                   color: ResumoDespesasPage._textMuted,
@@ -173,10 +227,10 @@ class _TotalSummary extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
-                'R\$ 620,00',
-                style: TextStyle(
+                totalText,
+                style: const TextStyle(
                   color: ResumoDespesasPage._expenseRed,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -190,8 +244,88 @@ class _TotalSummary extends StatelessWidget {
   }
 }
 
-class _ExpenseSummaryCard extends StatelessWidget {
-  const _ExpenseSummaryCard();
+class _DynamicExpenseSummaryCard extends StatelessWidget {
+  const _DynamicExpenseSummaryCard({
+    required this.categoryLabel,
+    required this.icon,
+    required this.items,
+  });
+
+  final String categoryLabel;
+  final IconData icon;
+  final List<DashboardExpense> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+      decoration: BoxDecoration(
+        color: ResumoDespesasPage._cardGreen,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.white, size: 34),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Despesas de $categoryLabel',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          for (final item in items) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        height: 1.15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '-${item.value}',
+                    style: const TextStyle(
+                      color: Color(0xFFEAF7EF),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (item != items.last) const SizedBox(height: 10),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class ExpenseSummaryCard extends StatelessWidget {
+  const ExpenseSummaryCard({super.key});
 
   static const _items = [
     _ExpenseItem('Conta de Energia', '-R\$ 300,00'),

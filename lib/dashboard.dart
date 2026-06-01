@@ -10,6 +10,25 @@ void main() {
   );
 }
 
+class DashboardCategory {
+  const DashboardCategory({
+    required this.icon,
+    required this.label,
+    this.expenses = const [],
+  });
+
+  final IconData icon;
+  final String label;
+  final List<DashboardExpense> expenses;
+}
+
+class DashboardExpense {
+  const DashboardExpense({required this.name, required this.value});
+
+  final String name;
+  final String value;
+}
+
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
@@ -21,17 +40,68 @@ class DashboardPage extends StatelessWidget {
   static const _textDark = Color(0xFF1B2D1C);
   static const _textMuted = Color(0xFF7A8F7B);
 
-  static const _categories = [
-    {'icon': Icons.home_outlined, 'label': 'Moradia'},
-    {'icon': Icons.build_outlined, 'label': 'Reforma'},
-    {'icon': Icons.school_outlined, 'label': 'Educação'},
-    {'icon': Icons.pets_outlined, 'label': 'Pets'},
-    {'icon': Icons.directions_car_outlined, 'label': 'Transporte'},
-    {'icon': Icons.restaurant_outlined, 'label': 'Alimentação'},
-    {'icon': Icons.favorite_outline, 'label': 'Saúde'},
-    {'icon': Icons.shopping_bag_outlined, 'label': 'Compras'},
-    {'icon': Icons.bar_chart_outlined, 'label': 'Relatórios'},
+  static const _defaultCategories = [
+    DashboardCategory(icon: Icons.home_outlined, label: 'Moradia'),
+    DashboardCategory(icon: Icons.build_outlined, label: 'Reforma'),
+    DashboardCategory(icon: Icons.school_outlined, label: 'Educação'),
+    DashboardCategory(icon: Icons.directions_car_outlined, label: 'Transporte'),
+    DashboardCategory(icon: Icons.restaurant_outlined, label: 'Alimentação'),
+    DashboardCategory(icon: Icons.favorite_outline, label: 'Saúde'),
+    DashboardCategory(icon: Icons.shopping_bag_outlined, label: 'Compras'),
+    DashboardCategory(icon: Icons.bar_chart_outlined, label: 'Relatórios'),
   ];
+  static final List<DashboardCategory> _createdCategories = [];
+
+  static List<DashboardCategory> get _categories => [
+    ..._defaultCategories,
+    ..._createdCategories,
+  ];
+
+  static void addExpenseCategory({
+    required String label,
+    required IconData icon,
+    required String expenseName,
+    required String expenseValue,
+  }) {
+    final normalizedLabel = label.trim();
+    final normalizedExpenseName = expenseName.trim();
+    final normalizedExpenseValue = expenseValue.trim();
+
+    if (normalizedLabel.isEmpty) {
+      return;
+    }
+
+    final expense = DashboardExpense(
+      name: normalizedExpenseName.isEmpty
+          ? normalizedLabel
+          : normalizedExpenseName,
+      value: normalizedExpenseValue.isEmpty
+          ? 'R\$ 0,00'
+          : 'R\$ $normalizedExpenseValue',
+    );
+    final existingIndex = _createdCategories.indexWhere(
+      (category) =>
+          category.label.toLowerCase() == normalizedLabel.toLowerCase(),
+    );
+
+    if (existingIndex >= 0) {
+      final existingCategory = _createdCategories[existingIndex];
+      _createdCategories[existingIndex] = DashboardCategory(
+        icon: existingCategory.icon,
+        label: existingCategory.label,
+        expenses: [...existingCategory.expenses, expense],
+      );
+      return;
+    }
+
+    _createdCategories.add(
+      DashboardCategory(
+        icon: icon,
+        label: normalizedLabel,
+        expenses: [expense],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,15 +297,19 @@ class DashboardPage extends StatelessWidget {
           itemCount: _categories.length,
           itemBuilder: (context, i) {
             final cat = _categories[i];
-            final label = cat['label'] as String;
+            final label = cat.label;
 
             return InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: label == 'Moradia'
+              onTap: label == 'Moradia' || cat.expenses.isNotEmpty
                   ? () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => const ResumoDespesasPage(),
+                          builder: (_) => ResumoDespesasPage(
+                            categoryLabel: label,
+                            icon: cat.icon,
+                            expenses: cat.expenses,
+                          ),
                         ),
                       );
                     }
@@ -256,11 +330,7 @@ class DashboardPage extends StatelessWidget {
                         color: _greenLight,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(
-                        cat['icon'] as IconData,
-                        color: _green,
-                        size: 20,
-                      ),
+                      child: Icon(cat.icon, color: _green, size: 20),
                     ),
                     const SizedBox(height: 7),
                     Text(
