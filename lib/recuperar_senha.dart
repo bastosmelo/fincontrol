@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'config.dart';
 import 'senha_enviada.dart';
-
 void main() {
   runApp(const RecuperarSenhaApp());
 }
@@ -26,7 +24,6 @@ class RecuperarSenhaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
       appBar: PreferredSize(

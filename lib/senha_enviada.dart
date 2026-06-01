@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'config.dart';
 import 'login_app.dart';
-
 void main() {
   runApp(const SenhaEnviadaApp());
 }

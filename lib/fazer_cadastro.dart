@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'cadastro_efetuado.dart';
 import 'config.dart';
 import 'login_app.dart';
