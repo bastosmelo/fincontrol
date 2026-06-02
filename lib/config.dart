@@ -28,6 +28,7 @@ class ConfigPage extends StatefulWidget {
 
 class _ConfigPageState extends State<ConfigPage> {
   bool perfilExpanded = false;
+  bool securityExpanded = false;
   bool notificacoesOn = true;
 
   @override
@@ -100,11 +101,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   buildProfileAccordion(width),
                   const SizedBox(height: 16),
 
-                  buildOptionTile(
-                    icon: Icons.security,
-                    title: 'Segurança e privacidade',
-                    onTap: () {},
-                  ),
+                  buildSecurityAccordion(width),
                   const SizedBox(height: 16),
 
                   buildSobreAccordion(width),
@@ -200,6 +197,58 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Excluir conta'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSecurityAccordion(double width) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          initiallyExpanded: securityExpanded,
+          onExpansionChanged: (v) => setState(() => securityExpanded = v),
+          leading: Icon(Icons.security, color: const Color(0xCC42AC27)),
+          title: const Text(
+            'Segurança e privacidade',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          childrenPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.play_arrow, color: Colors.black),
+              title: const Text('Alterar senha'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              onTap: () {},
+            ),
+            const Divider(height: 8),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.play_arrow, color: Colors.black),
+              title: const Text('Perguntas de segurança'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              onTap: () {},
+            ),
+            const Divider(height: 8),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.play_arrow, color: Colors.black),
+              title: const Text('Termos de uso'),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
               onTap: () {},
             ),
