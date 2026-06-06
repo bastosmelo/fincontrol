@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'config.dart';
 import 'senha_enviada.dart';
+
 void main() {
   runApp(const RecuperarSenhaApp());
 }
