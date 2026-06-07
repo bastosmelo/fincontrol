@@ -56,17 +56,6 @@ class CadastroEfetuadoPage extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => const ConfigPage()));
-              },
-              icon: const Icon(Icons.menu, color: Color(0xCC42AC27)),
-            ),
-            const SizedBox(width: 6),
-          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
