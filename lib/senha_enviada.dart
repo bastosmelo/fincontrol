@@ -1,4 +1,4 @@
-import 'package:fincontrol/fazer_cadastro.dart';
+import 'package:fincontrol/main.dart';
 import 'package:flutter/material.dart';
 
 void main() {

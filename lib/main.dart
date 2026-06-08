@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'firebase_options.dart';
+import 'fazer_cadastro.dart';
+import 'recuperar_senha.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -113,37 +115,141 @@ class _StartPageState extends State<StartPage> {
   }
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final String? errorMessage;
+  const LoginPage({super.key, this.errorMessage});
 
-  Future<void> _signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      
-      if (googleUser == null) {
-        return;
-      }
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-      final GoogleSignInAuthentication googleAuth = 
-          await googleUser.authentication;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.errorMessage != null) {
+      _showErrorSnackBar(widget.errorMessage!);
+    }
+  }
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+  @override
+  void didUpdateWidget(covariant LoginPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.errorMessage != null &&
+        widget.errorMessage != oldWidget.errorMessage) {
+      _showErrorSnackBar(widget.errorMessage!);
+    }
+  }
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      
-    } catch (e) {
-      if (context.mounted) {
+  void _showErrorSnackBar(String message) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erro ao fazer login: $e'),
+            content: Text(message),
             backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
           ),
         );
+      }
+    });
+  }
+
+  bool _isEmailValid(String? email) {
+    return email != null &&
+        email.trim().toLowerCase().endsWith('@souunit.com.br');
+  }
+
+  Future<void> _signInWithEmail() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showErrorSnackBar('Por favor, preencha e-mail e senha.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          );
+
+      if (!_isEmailValid(userCredential.user?.email)) {
+        await FirebaseAuth.instance.signOut();
+        _showErrorSnackBar(
+          'Acesso negado. Utilize apenas e-mails @souunit.com.br',
+        );
+        return;
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = 'Ocorreu um erro ao fazer login.';
+      if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password' ||
+          e.code == 'invalid-credential') {
+        message = 'E-mail ou senha inválidos.';
+      }
+      _showErrorSnackBar(message);
+    } catch (e) {
+      _showErrorSnackBar('Erro inesperado: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+    try {
+      UserCredential userCredential;
+
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        googleProvider.setCustomParameters({'hd': 'souunit.com.br',
+        'client_id': '436165991382-35b8qtvq2qlfpnrc3unbq6c1629jb0sl.apps.googleusercontent.com',});
+        userCredential = await FirebaseAuth.instance.signInWithPopup(
+          googleProvider,
+        );
+      } else {
+        final GoogleSignIn googleSignIn = GoogleSignIn(
+          scopes: ['email', 'profile'],
+        );
+        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+        if (googleUser == null) {
+          if (mounted) setState(() => _isLoading = false);
+          return;
+        }
+
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        userCredential = await FirebaseAuth.instance.signInWithCredential(
+          credential,
+        );
+      }
+
+      if (!_isEmailValid(userCredential.user?.email)) {
+        await FirebaseAuth.instance.signOut();
+        if (!kIsWeb) {
+          await GoogleSignIn().signOut();
+        }
+        _showErrorSnackBar(
+          'Acesso negado. Sua conta Google deve ser @souunit.com.br',
+        );
+        return;
+      }
+    } catch (e) {
+      _showErrorSnackBar('Erro ao fazer login com Google: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -151,76 +257,201 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    
     return Scaffold(
       backgroundColor: const Color(0xFFF0FFF4),
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/fincontrol-logo-2.png',
-                  width: (width * 0.5).clamp(150.0, 250.0),
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 40),
-                const Text(
-                  'FinControl',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2C3E50),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Controle suas finanças com eficiência',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF7F8C8D),
-                  ),
-                ),
-                const SizedBox(height: 48),
-                SizedBox(
-                  width: (width * 0.7).clamp(200.0, 300.0),
-                  child: ElevatedButton.icon(
-                    onPressed: () => _signInWithGoogle(context),
-                    icon: const Icon(Icons.login),
-                    label: const Text(
-                      'Entrar com Google',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Use seu e-mail institucional @souunit.com.br',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF95A5A6),
-                  ),
-                ),
-              ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          backgroundColor: const Color(0xFFF0FFF4),
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            'FinControl',
+            style: TextStyle(
+              color: const Color(0xCC42AC27),
+              fontSize: width > 400 ? 26 : 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Image.asset(
+              'assets/fincontrol-logo.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
             ),
           ),
         ),
+      ),
+      body: SafeArea(
+        child: AbsorbPointer(
+          absorbing: _isLoading,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 8),
+                    Text(
+                      'Login/Cadastro',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: width > 400 ? 32 : 26,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    SizedBox(
+                      width: width > 360 ? 340 : width * 0.85,
+                      child: TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: 'e-mail',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF0F0F0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      width: width > 360 ? 340 : width * 0.85,
+                      child: TextField(
+                        controller: _passwordController,
+                        textInputAction: TextInputAction.done,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'senha',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFFF0F0F0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 26),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _SocialLoginButton(
+                          assetPath: 'assets/Google.jpg',
+                          onPressed: _signInWithGoogle,
+                        ),
+                        const SizedBox(width: 22),
+                        _SocialLoginButton(
+                          assetPath: 'assets/Apple.png',
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 22),
+                        _SocialLoginButton(
+                          assetPath: 'assets/Facebook.jpg',
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
+                    SizedBox(
+                      width: width > 360 ? 280 : width * 0.7,
+                      height: 46,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE0E0E0),
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: _signInWithEmail,
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                  strokeWidth: 3,
+                                ),
+                              )
+                            : const Text('Login'),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const FazerCadastroPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Fazer cadastro',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const RecuperarSenhaPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Esqueci senha',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 80),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialLoginButton extends StatelessWidget {
+  const _SocialLoginButton({required this.assetPath, required this.onPressed});
+
+  final VoidCallback onPressed;
+  final String assetPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 52,
+      height: 52,
+      child: IconButton.filled(
+        padding: EdgeInsets.zero,
+        style: IconButton.styleFrom(
+          backgroundColor: const Color(0xFFEAF8EF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        onPressed: onPressed,
+        icon: Image.asset(assetPath, width: 28, height: 28),
       ),
     );
   }
@@ -286,7 +517,6 @@ class AuthGate extends StatelessWidget {
           if (_isEmailValid(user.email)) {
             return const DashboardPage();
           } else {
-            // Executa logout em background
             Future.microtask(() => _signOut());
             return const LoadingPage();
           }

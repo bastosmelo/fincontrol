@@ -1,9 +1,9 @@
-import 'package:fincontrol/fazer_cadastro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'main.dart';
 // Importe a página de login do seu projeto
 // Ajuste o caminho conforme sua estrutura de pastas
 // ou onde estiver sua LoginPage
@@ -41,17 +41,17 @@ class _ConfigPageState extends State<ConfigPage> {
     try {
       // Faz logout do Firebase
       await FirebaseAuth.instance.signOut();
-      
+
       // Faz logout do Google (apenas em plataformas não-web)
       if (!kIsWeb) {
         await GoogleSignIn().signOut();
       }
-      
+
       // Navega para a tela de login
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginPage()), // Use LoginPage diretamente
-          (route) => false,
+          MaterialPageRoute(builder: (_) => const StartPage()),
+          (route) => false, // Remove todas as rotas anteriores
         );
       }
     } catch (e) {
@@ -153,7 +153,8 @@ class _ConfigPageState extends State<ConfigPage> {
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      onPressed: () => _signOut(context), // Chama a função de logout
+                      onPressed: () =>
+                          _signOut(context), // Chama a função de logout
                       child: const Text('Sair'),
                     ),
                   ),

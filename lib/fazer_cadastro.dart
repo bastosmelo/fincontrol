@@ -62,11 +62,7 @@ class FazerCadastroPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF68D391),
         shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginPage()),
-          );
-        },
+        onPressed: () => Navigator.of(context).maybePop(),
         child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       body: SafeArea(
@@ -159,14 +155,5 @@ class FazerCadastroPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Login Page')));
   }
 }
