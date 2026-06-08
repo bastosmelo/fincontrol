@@ -8,7 +8,7 @@ ________________________________________________________________________________
 |----------------------------------|---------------------------------------------------|-----------------------------------------------------
 | Bruno Bastos Melo                | Tela de Login, Autenticação de Usuário            | https://youtu.be/wvBt5o25cJU                       |
 | Brendo de Jesus Silva            | Recuperar senha, Tela de confirmação              |                                                    |
-| Gabriel Allan Ribeiro da Silva   | Dashboard, Inclusão de despesas.                  |                                                    |
+| Gabriel Allan Ribeiro da Silva   | Dashboard, Inclusão de despesas.                  | https://www.youtube.com/watch?v=XhzCtJw1VdU                                                   |
 | Jean Marcos Lima Santos          | Ajuste da tela de configuração                    |                                                    |
 |Arthur Vinícius Sousa de Melo     | Tela de cadastro                                  |                                                    |
 ---------------------------------------------------------------------------------------------------------------------------------------------
