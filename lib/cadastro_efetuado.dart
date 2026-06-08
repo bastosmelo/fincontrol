@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'config.dart';
-import 'login_app.dart';
-
 void main() {
   runApp(const CadastroEfetuadoApp());
 }
@@ -108,6 +105,18 @@ class CadastroEfetuadoPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class LoginAppPage extends StatelessWidget {
+  const LoginAppPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: const Center(child: Text('Login Page')),
     );
   }
 }

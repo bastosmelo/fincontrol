@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'cadastro_efetuado.dart';
-import 'config.dart';
-import 'login_app.dart';
 
 void main() {
   runApp(const FazerCadastroApp());
@@ -66,7 +64,7 @@ class FazerCadastroPage extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+            MaterialPageRoute(builder: (_) => const LoginPage()),
           );
         },
         child: const Icon(Icons.arrow_back, color: Colors.white),
@@ -161,5 +159,14 @@ class FazerCadastroPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Center(child: Text('Login Page')));
   }
 }

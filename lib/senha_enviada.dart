@@ -1,6 +1,5 @@
+import 'package:fincontrol/fazer_cadastro.dart';
 import 'package:flutter/material.dart';
-import 'config.dart';
-import 'login_app.dart';
 
 void main() {
   runApp(const SenhaEnviadaApp());
@@ -64,7 +63,7 @@ class SenhaEnviadaPage extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const LoginAppPage()),
+            MaterialPageRoute(builder: (_) => const LoginPage()),
             (route) => false,
           );
         },

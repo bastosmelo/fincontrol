@@ -1,6 +1,12 @@
+import 'package:fincontrol/fazer_cadastro.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'login_app.dart';
+// Importe a página de login do seu projeto
+// Ajuste o caminho conforme sua estrutura de pastas
+// ou onde estiver sua LoginPage
 
 void main() {
   runApp(const ConfigApp());
@@ -30,6 +36,35 @@ class _ConfigPageState extends State<ConfigPage> {
   bool perfilExpanded = false;
   bool securityExpanded = false;
   bool notificacoesOn = true;
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      // Faz logout do Firebase
+      await FirebaseAuth.instance.signOut();
+      
+      // Faz logout do Google (apenas em plataformas não-web)
+      if (!kIsWeb) {
+        await GoogleSignIn().signOut();
+      }
+      
+      // Navega para a tela de login
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginPage()), // Use LoginPage diretamente
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao sair: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +153,7 @@ class _ConfigPageState extends State<ConfigPage> {
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (_) => const LoginAppPage()),
-                          (route) => false,
-                        );
-                      },
+                      onPressed: () => _signOut(context), // Chama a função de logout
                       child: const Text('Sair'),
                     ),
                   ),
@@ -158,7 +188,10 @@ class _ConfigPageState extends State<ConfigPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          childrenPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          childrenPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           children: [
             // Notificações (com switch)
             ListTile(
@@ -179,7 +212,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Atualizar número de telefone'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -188,7 +225,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Alterar E-mail'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -197,7 +238,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Excluir conta'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
           ],
@@ -227,13 +272,20 @@ class _ConfigPageState extends State<ConfigPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          childrenPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          childrenPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Alterar senha'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -241,7 +293,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Perguntas de segurança'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -249,7 +305,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Termos de uso'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
           ],
@@ -277,13 +337,20 @@ class _ConfigPageState extends State<ConfigPage> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          childrenPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          childrenPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Versão atual do app'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -291,7 +358,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Termos de uso'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
             const Divider(height: 8),
@@ -299,7 +370,11 @@ class _ConfigPageState extends State<ConfigPage> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.play_arrow, color: Colors.black),
               title: const Text('Política de privacidade'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Color(0xCC42AC27)),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Color(0xCC42AC27),
+              ),
               onTap: () {},
             ),
           ],
